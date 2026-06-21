@@ -122,7 +122,9 @@ for i, v in enumerate(n_users):
 plt.suptitle('A/B-тест: Новый дизайн', fontsize=17)
 plt.tight_layout()
 plt.show()
-
+fig.savefig('images/conversion_comparison.png', dpi=300, bbox_inches='tight')
+fig.savefig('images/lift.png', dpi=300, bbox_inches='tight')
+fig.savefig('images/user_counts.png', dpi=300, bbox_inches='tight')
 
 
 #Делаем подсчет на статистическую значимость двух
