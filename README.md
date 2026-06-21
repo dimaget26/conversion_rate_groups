@@ -31,8 +31,7 @@
 ### 📈 Графики
 
 ![Сравнение конверсии](images/conversion_comparison.png)
-![Прирост (Lift)](images/lift.png)
-![Количество пользователей](images/user_counts.png)
+
 
 ---
 
