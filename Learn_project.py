@@ -108,7 +108,7 @@ axes[1].bar(['Прирост (Lift)'], [lift], color=color)
 axes[1].set_title('Относительный прирост', fontsize=14)
 axes[1].set_ylabel('Прирост (%)', fontsize=12)
 axes[1].grid(axis='y', alpha=0.3)
-axes[1].text(6, lift + 0.5, f'{lift:.1f}%', ha='center', va='bottom', fontsize=14, fontweight='bold')
+# axes[1].text(6, lift + 0.5, f'{lift:.1f}%', ha='center', va='bottom', fontsize=14, fontweight='bold')
 
 # ----- ГРАФИК 3: Количество пользователей -----
 n_users = [df_ab_test['total_user_A_group'].iloc[0], df_ab_test['total_user_B_group'].iloc[0]]
@@ -123,8 +123,7 @@ plt.suptitle('A/B-тест: Новый дизайн', fontsize=17)
 plt.tight_layout()
 plt.show()
 fig.savefig('images/conversion_comparison.png', dpi=300, bbox_inches='tight')
-fig.savefig('images/lift.png', dpi=300, bbox_inches='tight')
-fig.savefig('images/user_counts.png', dpi=300, bbox_inches='tight')
+
 
 
 #Делаем подсчет на статистическую значимость двух
