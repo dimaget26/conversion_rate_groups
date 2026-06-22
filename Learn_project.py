@@ -3,6 +3,9 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 import sqlite3
+from scipy.stats import alpha
+
+
 
 # ----- ГЕНЕРИРУЕМ ДАННЫЕ -----
 np.random.seed(42)
@@ -32,6 +35,8 @@ print("=== ПЕРВЫЕ 5 СТРОК ===")
 print(df.head())
 print(f"\nГруппа A: {len(df[df['group'] == 0])}")
 print(f"Группа B: {len(df[df['group'] == 1])}")
+
+
 # ----- СОХРАНЯЕМ В БАЗУ -----
 conn = sqlite3.connect('A_B_test.db')
 df.to_sql('test', conn, if_exists='replace', index=False)
@@ -161,3 +166,47 @@ print(f'4. РЕКОМЕНДАЦИЯ:'
       f'\n- 🔄 Продолжить тест до набора статистической мощности'
       f'\n- 📈 Увеличить размер выборки до 20 000 пользователей'
       f'\n- 🎯 Сфокусироваться на сегменте (например, мобильные пользователи)')
+
+from statsmodels.stats.proportion import proportion_effectsize
+from statsmodels.stats.power import NormalIndPower
+#Проверим правильность sample size теста
+#MDE 1%
+base_conversion = 0.1058
+MDE = base_conversion * 0.1
+p2 = base_conversion + MDE
+
+effect_size = proportion_effectsize(base_conversion, p2)
+#Уровень значимости базовая 5%
+alpha = 0.05
+
+#Статистическая мощность базовая 80%
+power = 0.80
+
+#Производим расчет
+analysis = NormalIndPower()
+
+sample_size_per_group = analysis.solve_power(
+    effect_size=effect_size,
+    nobs1=None,
+    alpha=alpha,
+    power=power,
+    ratio=1.0,
+    alternative='two-sided'
+)
+
+#Расчеты и выводы по размеру теста
+print('=' * 70)
+print('РАСЧЕТ РАЗМЕРА ВЫБОРКИ ДЛЯ A/B ТЕСТА')
+print('=' * 70)
+print(f'Базовая конверсия: {base_conversion*100:.2f}%')
+print(f'Уровень значимости (alpha): {alpha*100:.0f}%')
+print(f'Статистическая мощность (power): {power*100:.0f}%')
+print(f'Минимальный эффект (MDE): {MDE*100:.0f} п.п.')
+print(f'Необходимый размер выборки (на одну группу): {int(sample_size_per_group):,} пользователей')
+print(f'Необходимый размер всей выборки (обе группы): {int(sample_size_per_group*2):,} пользователей')
+print('=' * 70)
+print('Получаем вывод того, что изначально был неправильно рассчитан размер выборки по кол-ву пользователей')
+print(f'В нашем тесте {len(df):,} пользователей на обе группы')
+print(f'Необходимо пользователей - {int(sample_size_per_group*2):,}')
+print(f'⚠️Проходим к тому, что тесту не хватило {int(sample_size_per_group*2) - len(df):,} пользователя, для обнаружения эффекта {MDE*100:.1f}% ')
+
