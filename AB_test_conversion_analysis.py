@@ -6,7 +6,6 @@ import sqlite3
 
 
 
-
 # ----- ГЕНЕРИРУЕМ ДАННЫЕ -----
 np.random.seed(42)
 n_users = 10000
